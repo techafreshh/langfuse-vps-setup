@@ -1,0 +1,27 @@
+services:
+  langfuse-worker:
+    ports:
+      - 3030:3030
+
+  langfuse-web:
+    ports:
+      - 3276:3000
+
+  clickhouse:
+    ports:
+      - 8731:8123
+      - 19000:9000
+      - 19009:9009
+
+  minio:
+    ports:
+      - 19040:9000
+      - 19041:9001
+
+  postgres:
+    ports:
+      - 5433:5432                
+
+  redis:
+    ports:
+      - 6379:6379
