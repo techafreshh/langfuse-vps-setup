@@ -1,0 +1,30 @@
+services:
+  langfuse-worker:
+    networks:
+      - default
+
+  langfuse-web:
+    networks:
+      - web_gateway
+      - default
+
+  clickhouse:
+    networks:
+      - default
+
+  minio:
+    networks:
+      - web_gateway
+      - default
+
+  postgres:    
+    networks:
+      - default           
+
+  redis:
+    networks:
+      - default
+
+networks:
+  web_gateway:
+    external: true
