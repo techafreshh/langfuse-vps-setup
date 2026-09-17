@@ -1,0 +1,25 @@
+<clickhouse>
+    <!-- Disable system log tables that grow unbounded (main cause of
+         ClickHouse disk bloat on Langfuse v3) -->
+    <query_log remove="1"/>
+    <query_thread_log remove="1"/>
+    <query_views_log remove="1"/>
+    <trace_log remove="1"/>
+    <part_log remove="1"/>
+    <metric_log remove="1"/>
+    <asynchronous_metric_log remove="1"/>
+    <session_log remove="1"/>
+    <text_log remove="1"/>
+    <zookeeper_log remove="1"/>
+    <blob_storage_log remove="1"/>
+
+    <!-- Cap ClickHouse memory on this shared host (11GB total RAM) -->
+    <max_server_memory_usage_to_ram_ratio>0.35</max_server_memory_usage_to_ram_ratio>
+
+    <!-- Keep server logs small and rotated -->
+    <logger>
+        <level>warning</level>
+        <size>50M</size>
+        <count>3</count>
+    </logger>
+</clickhouse>

@@ -16,7 +16,7 @@ services:
         condition: service_healthy
       clickhouse:
         condition: service_healthy
-    ports:
+    expose:
       - 3030/tcp
     env_file:
       - .env
@@ -74,13 +74,14 @@ services:
     image: docker.io/langfuse/langfuse:3
     restart: always
     depends_on: *langfuse-depends-on
-    ports:
+    expose:
       - 3000/tcp
     env_file:
       - .env
     environment:
       <<: *langfuse-worker-env
       NEXTAUTH_SECRET: ${NEXTAUTH_SECRET:-} # CHANGEME
+      HOSTNAME: 0.0.0.0
       LANGFUSE_INIT_ORG_ID: ${LANGFUSE_INIT_ORG_ID:-}
       LANGFUSE_INIT_ORG_NAME: ${LANGFUSE_INIT_ORG_NAME:-}
       LANGFUSE_INIT_PROJECT_ID: ${LANGFUSE_INIT_PROJECT_ID:-}
@@ -104,7 +105,8 @@ services:
     volumes:
       - langfuse_clickhouse_data:/var/lib/clickhouse
       - langfuse_clickhouse_logs:/var/log/clickhouse-server
-    ports:
+      - ./clickhouse/config.d/tune.xml:/etc/clickhouse-server/config.d/zz-tune.xml:ro
+    expose:
       - 8123/tcp
       - 9000/tcp
     healthcheck:
@@ -123,7 +125,7 @@ services:
     environment:
       MINIO_ROOT_USER: ${MINIO_ROOT_USER:-techa}
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-qwertyuioptggukk} # CHANGEME
-    ports:
+    expose:
       - 9090/tcp
       - 9091/tcp
       - 9009/tcp
@@ -142,7 +144,7 @@ services:
     # CHANGEME: row below to secure redis password
     command: >
       --requirepass ${REDIS_AUTH:-qwertyuioptggukk} --maxmemory-policy noeviction
-    ports:
+    expose:
       - 6379/tcp
     volumes:
       - langfuse_redis_data:/data
@@ -166,7 +168,7 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-pg_db}
       TZ: GMT+1
       PGTZ: GMT+1
-    ports:
+    expose:
       - 5432/tcp
     volumes:
       - langfuse_postgres_data:/var/lib/postgresql/data
